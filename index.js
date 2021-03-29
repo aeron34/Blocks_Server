@@ -9,10 +9,10 @@ const moment = require('moment');
 const knx = require('knex')({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : 'madflow336',
-    database : 'game'
+    host : 'linxgame.cfaek1ku0lxd.us-east-2.rds.amazonaws.com',
+    user : 'Linx_DB',
+    password : 'L$Ioasn$#NS12.432.',
+    database : 'linxgame'
   },
 });
 
