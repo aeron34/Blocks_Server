@@ -6,7 +6,7 @@ submit.onclick = function()
   let name = document.getElementById('name').value;
   let pass = document.getElementById('password').value;
 
-  fetch('http://localhost:3000/register', {
+  fetch('http://www.linxthegame.com/register', {
 		method: 'post', //basically the 4 types of HTTP request, get, post, ect.
 		headers: {'Content-Type': 'application/json'}, // these both need to be in quotes
 		body: JSON.stringify({
