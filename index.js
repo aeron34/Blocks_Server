@@ -12,6 +12,7 @@ const knx = require('knex')({
     host : 'linxgame.cfaek1ku0lxd.us-east-2.rds.amazonaws.com',
     user : 'Linx_DB',
     password : 'L$Ioasn$#NS12.432.',
+    database: 'postgres'
   },
 });
 
