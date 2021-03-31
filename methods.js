@@ -10,8 +10,36 @@ function FilterRoomForUser(room_manager, room, name)
   })
 }
 
+const dummy_leader = [
+  {username: '2TOBainz',
+    highest_score: 5262503,
+    highest_link: 13,
+    highest_combo: 5
+  },
+  {username: 'Monochrome',
+      highest_score: 3432503,
+    highest_link: 12,
+    highest_combo: 4
+  },
+  {username: 'Sono3',
+    highest_score: 2432503,
+    highest_link: 17,
+    highest_combo: 7
+  },
+  {username: 'TotoVibe',
+    highest_score: 842503,
+    highest_link: 7,
+    highest_combo: 6
+  },
+  {username: '32Vella',
+      highest_score: 12842503,
+      highest_link: 13,
+      highest_combo: 4
+  }
+];
+
 let AUTO_NAMES = [
-  '2 Chainz',
+  '2TOBainz',
   'Monochrome',
   'Sono3',
   'TotoVibe',
@@ -25,6 +53,35 @@ let AUTO_NAMES = [
   'Tuco_Salamanca',
   'Android18',
 ]
+
+const numsuf = require('number-suffix');
+
+async function Get_Leaders(res, knx)
+{
+  let return_list = [[],[],[]];
+  let props = ['highest_score', 'highest_links', 'highest_combo'];
+
+  for(let i = 0; i < 3; i++)
+  {
+    await knx('users').orderBy(props[i], 'desc').
+    then(user_list => {
+        let prop = props[i]
+        return_list[i] = user_list.map(user => {
+        let obj = {username: user.username}
+        let num = user[prop];
+        if(num >= 1000)
+        {
+          num = numsuf.format(parseInt(user[prop]), {precision: 2});
+        }
+        obj[prop] = num;
+        return obj;
+      })
+    })
+  }
+
+  res.json(return_list);
+
+}
 
 async function Auto_Send_Mets(name, knx)
 {
@@ -44,7 +101,7 @@ async function Auto_Send_Mets(name, knx)
 
     await knx('users').where('username', name)
     .update({
-      meteors: 3 + parseInt(target_users_meteors)
+      meteors: 3
     }).then(a => {
       return;
     }, a => {
@@ -70,7 +127,7 @@ async function Auto_IncreaseScore(room, ROOM_SIZE, knx)
         if(AUTO_NAMES.includes(x.username))
         {
             x.score += parseInt(add_score);
-            if(Math.floor(Math.random() * 6) <= 2)
+            if(Math.floor(Math.random() * 10) <= 2)
             {
               target = room[Math.floor(Math.random() * room.length)];
 
@@ -189,4 +246,5 @@ module.exports = {
   Auto_IncreaseScore,
   Auto_Addtoroom,
   AUTO_NAMES,
+  Get_Leaders,
 };

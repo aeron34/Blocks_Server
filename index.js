@@ -6,13 +6,15 @@ const path = require('path');
 const moment_tz = require('moment-timezone');
 const moment = require('moment');
 
+let emp = '';
+
 const knx = require('knex')({
   client: 'pg',
   connection: {
     host : 'linxgame.cfaek1ku0lxd.us-east-2.rds.amazonaws.com',
     user : 'Linx_DB',
     password : 'L$Ioasn$#NS12.432.',
-    database: 'postgres'
+    database: 'postgres',
   },
 });
 
@@ -327,10 +329,9 @@ app.post('/end_game', async (req, res) => {
     let user = req.body;
     let db_user_info;
     let done = false;
-
+    console.log(user);
     await knx('users').where({
       'username': user.username,
-      'password': user.password
     }).then(response => {
         if(response.length != 0)
         {
@@ -343,11 +344,32 @@ app.post('/end_game', async (req, res) => {
 
     if(!done)
     {
+      if(user.combo > db_user_info.highest_combo)
+      {
+        console.log('good');
+        await knx('users').where({
+          'username': user.username,
+        }).update({
+          highest_combo: user.combo
+        });
+      }
+
+      console.log(db_user_info)
+      console.log(user.links);
+      if(user.links > db_user_info.highest_links)
+      {
+        console.log('asda');
+        await knx('users').where({
+          'username': user.username,
+        }).update({
+          highest_links: user.links
+        });
+      }
+
       if(user.score > db_user_info.highest_score)
       {
         await knx('users').where({
-          'username': user.username,
-          'password': user.password
+          'username': user.username
         }).update({
           highest_score: user.score
         }).then(response => {
@@ -359,6 +381,11 @@ app.post('/end_game', async (req, res) => {
         ${db_user_info.highest_score}`);
       }
     }
+});
+
+app.get('/get_leaderboard', async (req, res) => {
+  await methods.Get_Leaders(res, knx);
+
 });
 
 app.get('/show_dictionary', (req, res) => {
@@ -443,6 +470,11 @@ app.post('/send_result', async (req, res) => {
 
 app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/static/index.html');
+});
+
+
+app.get('/leaderboards', (req, res) => {
+	res.sendFile(__dirname + '/static/leaderboards.html');
 });
 
 app.use(express.static(__dirname + '/build/'));
@@ -599,4 +631,4 @@ app.post('/register', (req, res) => {
   urls.createUser(req, res, u, knx);
 });
 
-app.listen(process.env.PORT);
+app.listen(3000);

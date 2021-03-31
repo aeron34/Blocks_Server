@@ -5,9 +5,9 @@ const createUser = (req, res, u, knx) => {
     password: u["password"]
   }).returning('*').then(a => res.status(300).json({
     status: a
-  }), a => {
-    console.log('sop');
-    res.json({resp: "already"})
+  }), err => {
+    console.log(err);
+    res.json(err)
   });
 }
 

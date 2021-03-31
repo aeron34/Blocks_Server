@@ -1,0 +1,27 @@
+
+._leader_boxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 80%;
+  height: 90vh;
+  margin: auto;
+  margin-top: 5%;
+  margin-left: 15%;
+}
+
+h1{
+  color: white;
+  margin-bottom:10%;
+}
+h2{
+  font-size: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  width:225px;
+  text-overflow: ellipsis;
+}
+._leader_box {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  margin-bottom: 5%;
+}
