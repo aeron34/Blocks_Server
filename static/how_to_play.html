@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>LINX The Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="files/css/index.css">
+    <link rel="stylesheet" href="files/css/how_to.css">
+
+  </head>
+
+  <body>
+
+      <nav class="navbar navbar-expand-lg navbar-dark"
+      style="background: black; padding-left: 5%">
+        <a class="navbar-brand" href="/">LINX</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Game</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/how_to_play">How To Play</a>
+            </li>d
+            <li class="nav-item">
+              <a class="nav-link" href="/leaderboards">Leaderboards</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <article class="_main_content">
+        <div class="table_of_contents">
+          <h2> Table of Contents </h2>
+          <a href="#whatislinks">What is LINX?</a>
+          <a href="#controls">Controls</a>
+          <a href="#fundamentals">Fundamentals</a>
+          <a href="#Horizontal">Horizontal Swapping </a>
+          <a href="#Vertical">Vertical Swapping</a>
+          <a href="#Gizmo"> Gizmo </a>
+          <a href="#Distance Swap"> Distance Swap/Dropping </a>
+          <a href="#Weapons">Weapons </a>
+          <a href="#Boxer">Boxer </a>
+
+        </div>
+        <div class="_tut_box">
+          <h2 id='whatislinks'> What is LINX? </h2>
+          <p> LINX is a Puzzle game in which you compete against others
+          online for the highest score by stacking, rearrange, and swapping
+          blocks.
+
+          In this game there are 2 game modes, Free For All, and Friend Match.
+          Both of these require you to get the highest score out of the others
+          you're playing against to win the match</p>
+          <h2 id='controls'> Controls </h2>
+          <img src='files/tutorial/layout.png' style='margin:auto;
+          margin-bottom: 8%'>
+          <p>WASD - Movement</p>
+          <p>Space - Horizontal Swap</p>
+          <p>J - Vertical Swap</p>
+          <p>K - Depends On Character </p>
+          <p>L - Detonate Link beside you </p>
+          <p>I - Detonate Link underneath you</p>
+          <p>U - Depends On Character </p>
+          <p>O - Depends On Character </p>
+          <p>; - If Gizmo is Chosen, Detonates single block</p>
+
+          <h2 id='fundamentals'> Fundamentals </h2>
+          <p> How you gain points in this game is by detonating Links.
+          What is a Link? A Link is formed when 3 or more blocks are touching
+          each other.</p>
+          <img src='files/tutorial/tut1.png' style='margin:auto;'>
+          <p>Here's an in-game representation for more context:</p>
+          <img src='files/tutorial/Link.png' style='margin:auto;
+          margin-bottom: 8%;'>
+          <p>
+          The easiest way to form Links is by <span style='font-weight: bold'>Swapping</span>
+          </p>
+          <p id='Horizontal'>We'll cover Horizontal Swap first. </p>
+          <p>Stand on top of a block and press space. The block your standing over
+          will be swapped with the block to it's left, <span style='font-weight: bold'>ALWAYS LEFT, no matter what direction your facing.</span>
+          <br>
+          <br>
+          Horizonal Swap example:
+
+          <img src='files/tutorial/swap.gif' style='margin:auto;'>
+          </p>
+
+          <p id='Vertical'>Now for Vertical Swap. </p>
+          <p>Stand <span style='font-weight: bold'>next</span> to a block and press J.<br><br>
+          If where your standing has atleast 2 blocks, the block that's
+          closer to the lower half of your body will be swapped with the block above it.
+
+          <br><br>Vertical Swap example:
+
+          <img src='files/tutorial/v_swap.gif' style='margin:auto;'>
+          </p>
+
+          <p>Lastly for Fundamentals there's detonating. </p>
+
+          <p>If your standing over a Link, anywhere on it, press I to
+          detonate it</p>
+
+          <p>If your standing beside a Link, press L to
+          detonate it</p>
+
+          <p>Let's create and detonate links by using basic
+          fundamentals:
+
+          <img src='files/tutorial/linx.gif' style='margin:auto;'>
+          <br><br>
+          It's also worth mentioning that like other puzzle games such as Puyo-Puyo, you can create combos
+          by detonating a Link, then having a block of a diffent color fall
+          and complete another Link. <br><br>
+
+          The formula for how many points you get from detonating a Link:
+<br><br>
+          size_of_link to the 5th power = points,
+          <br><br>
+          for example, a link of 4 is 4 ^ 5 = 1024.
+
+          </p>
+
+          <h2> Characters</h2>
+          <h2 id='Gizmo'> Gizmo </h2>
+          <p>The 2 characters in this game are able to
+          do different things.<br> Let's talk about what
+          makes Gizmo unique</p>
+          <h2 id='Distance Swap'> Distance Swap/Dropping </h2>
+
+          <img src='files/tutorial/tut2.png' style='margin:auto;'>
+          <br><br>
+          <p>Here's a in-game example:</p>
+          <img src='files/tutorial/dist_swap.gif' style='margin:auto;'>
+          <br>
+          <p>If the block is still overhead and you haven't
+          swapped it yet, if there isn't a block in front of you
+          press K again to drop it in front of you.
+          </p>
+
+          <p>Here's an example:
+            <img src='files/tutorial/make_links.gif' style='margin:auto;'>
+          </p>
+          <h2 id='Weapons'> Weapons </h2>
+          <p>Gizmo has weapons, hence his name. There in the left hand
+          corner is the weapons box. From left to right the weapons are:
+          <br><br> - Grenades
+          <br> - Spider (a tool that changes color of blocks)
+          <br> - Super Distance Swap (allow you to distance swap with mouse)
+          <br><br>
+          press U to toggle which weapon you want to use, then press O to use it.
+
+          <br><br>
+          Here I demonstrate each of them in order:
+          <br>
+          <img src='files/tutorial/weapons.gif' style='margin:auto;'>
+          </p>
+          <p>You now know how to use Gizmo!</p>
+          <h2 id='Boxer'> Boxer </h2>
+          <p> Then there is the Boxer character. He can do the same
+          things as Gizmo except for distance swapping and using
+          weapons. But he is faster than Gizmo, can jump higher, can
+          explode blocks in place, and more.</p>
+
+          <p> You can press "O" beside a block to punch and explode it.
+            <br>   <img src='files/tutorial/box1.gif' style='margin:auto;'>
+          </p>
+
+          <p> You can hold "S" and press "O" to explode a block underneath you.
+            <br> <img src='files/tutorial/box2.gif' style='margin:auto;'>
+          </p>
+
+          <p> Near a block, holding "A"(left) or "D"(right) and
+          pressing "K" will perform a push punch, pushing the
+          block a distance of 3 blocks.
+          <br> <img src='files/tutorial/pushbox.gif' style='margin:auto;'>
+          </p><p>Holding no direction will simply push it one block distance.
+          <br> <img src='files/tutorial/slightpush.gif' style='margin:auto;'>
+        </p>
+
+        <p>The Boxer, like Gizmo, has tools apart from basic mechanics
+        that help you score higher than other players. He has moves
+        that be utilised via button inputs. These work like they do in
+        fighting games. Here are the input combinations, keep in mind
+        the direction your facing does matter, which is why the
+        facing right/left is there:
+        <br><br>UPPERCUT - FACING RIGHT: "S", "D", "U"/FACING LEFT: "S", "A", "U"
+        <br>OVERHAND (Past dark marker) - FACING RIGHT: "S", "D", "S", "D", "U", <br>FACING LEFT: "S", "A", "S", "A", "U"
+        <br>GROUND POUND (Needs FULL BAR) - "S", "U" </p>
+
+        <p> Here I'll demonstrate the Moves in the order used above
+          <br> <img src='files/tutorial/ults.gif' style='margin:auto;'>
+
+        </p>
+        <p>You now know how to use the Boxer!</p>
+        </div>
+    </article>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  </body>
+</html>

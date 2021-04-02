@@ -319,6 +319,10 @@ app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname+'/static/register.html'));
 });
 
+app.get('/how_to_play', (req, res) => {
+  res.sendFile(path.join(__dirname+'/static/how_to_play.html'));
+});
+
 var now = moment("2021-02-06T10:05:29");
 var a = moment_tz.utc(now).tz("Asia/Taipei");
 b = now.utc().format();
@@ -631,4 +635,4 @@ app.post('/register', (req, res) => {
   urls.createUser(req, res, u, knx);
 });
 
-app.listen(process.env.PORT);
+app.listen(3000);
