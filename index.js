@@ -1,401 +1,53 @@
-const dum = require('./dummy');
-const urls = require('./URL_METHODS');
-const methods = require('./methods');
 const express = require('express');
-const path = require('path');
-const moment_tz = require('moment-timezone');
-const moment = require('moment');
-
-let emp = '';
-
-const knx = require('knex')({
-  client: 'pg',
-  connection: {
-    host : 'linxgame.cfaek1ku0lxd.us-east-2.rds.amazonaws.com',
-    user : 'Linx_DB',
-    password : 'L$Ioasn$#NS12.432.',
-    database: 'postgres',
-  },
-});
-
-
-class RoomManager
-{
-  rooms_dictionary = {
-
-     "michael":[
-     {
-           "username": "syad234a",
-           "score": 0
-       },
-       {
-           "username": "syad2",
-           "score": 0
-       },
-       {
-           "username": "syad212",
-           "score": 0
-       },
-       {
-           "username": "syad212s",
-           "score": 0
-       },
-       {
-           "username": "syad212sa",
-           "score": 0
-       }
-   ]
-  };
-
-  numberOfRooms = 0;
-  roomAutoDeleteTime = 1800000/2;
-  string_room = false;
-
-  createRoom = (addSelf = false, username='', room, genesis=false) =>
-  {
-    if(!this.string_room || genesis == true)
-    {
-      let {rooms_dictionary, roomNumber,  roomAutoDeleteTime} = this;
-
-
-      if(room == undefined)
-      {
-
-          this.numberOfRooms++;
-          roomNumber = this.numberOfRooms;
-
-      }else{
-        roomNumber = room
-      }
-
-
-      rooms_dictionary[`${roomNumber}`] = [];
-
-      if(addSelf)
-      {
-          rooms_dictionary[`${roomNumber}`].push(
-            {username: `${username}`, score: 0}
-          );
-      }
-
-      let room_size = 6;
-      if(`${roomNumber}`.includes('team'))
-      {
-        room_size = 8;
-      }
-
-      let incScore = setInterval(methods.Auto_IncreaseScore, 3500, rooms_dictionary[`${roomNumber}`], room_size, knx);
-
-      let addTo = function()
-      {
-        setTimeout(() => {
-          if(rooms_dictionary[`${roomNumber}`].length < room_size)
-          {
-            methods.Auto_Addtoroom(`${roomNumber}`, room_manager.addUserToRoom, rooms_dictionary);// DEFAULT_ROOM_SIZE);
-            addTo();
-          }
-        }, 5000);
-      }
-
-      addTo();
-
-
-      setTimeout(() => {
-      //clearInterval(addTo);
-        clearInterval(incScore);
-        delete this.rooms_dictionary[`${roomNumber}`];
-      }, roomAutoDeleteTime);
-    }
-  }
-
-  numberOfTeams = 0;
-
-  splitTeamRoom = (room) =>
-  {
-      let team = "A";
-
-      for(let i = 0; i < 8; i++)
-      {
-
-        if(i == 4)
-        {
-          team = "B";
-        }
-
-        this.rooms_dictionary[`${room}`][i]['team'] = team
-      }
-  }
-
-  addUserToRoom = (room_no = -1, username="", ROOM_SIZE=DEFAULT_ROOM_SIZE) => {
-
-    let {rooms_dictionary, numberOfRooms, string_room} = this;
-    let team = false;
-
-    if(typeof(room_no) === 'string' &&
-    room_no.includes('team'))
-    {
-      team = true;
-      ROOM_SIZE = 8;
-    }
-
-    if(room_no == 'team-1')
-    {
-      room_no = `team${this.numberOfTeams}`;
-    }
-
-    if(room_no != -1)
-    {
-      /*I'm using a slick trick, if room_no is
-      greater than -1, menaing the user does have
-      a room number, then set numberOfRooms to
-      that number, remember this doesn't effect
-      this.numberOfRooms (the actual number representing
-      the number of rooms), so numberOfRooms =/= this.numberOfRooms*/
-      numberOfRooms = room_no
-    }
-
-
-    //methods.CleanRoom(rooms_dictionary, numberOfRooms);
-
-    /*If the user doens't have a number AND the room at
-    said number doesn't either, create it and increase
-    the number so total rooms is updated and other players
-    with no number can find it easily:
-    */
-
-
-    //If the room doesn't exist.
-    if(!rooms_dictionary.hasOwnProperty(`${numberOfRooms}`))
-    {
-      this.createRoom(true, username, numberOfRooms, true);
-
-      return numberOfRooms;
-    }
-    else {
-
-      /*TEST 1:
-
-      Check if the object ({...}) is in the room.
-      if it is and the room is full, run the room*/
-
-      let obj_inside= false;
-      for(let i = 0; i < rooms_dictionary[`${numberOfRooms}`].length; i++)
-      {
-        if(rooms_dictionary[`${numberOfRooms}`][i].username == username)
-        {
-          obj_inside = true;
-          break;
-        }
-      }
-
-      //If the user's OBJ is inside the room already OR if
-      //the room has a property "A", which means it was divided
-      if(obj_inside &&
-      rooms_dictionary[`${numberOfRooms}`].length == ROOM_SIZE)
-      {
-
-        //Make a new room.
-        if(team)
-        {
-            this.splitTeamRoom(numberOfRooms)
-        }
-
-        return `${["running", numberOfRooms]}`;
-      }
-
-      /*TEST 1.5
-
-      This is an extension of Test 1, if the object
-      is inside the array BUT the room isn't full
-      just return the room number */
-
-      if(obj_inside &&
-      rooms_dictionary[`${numberOfRooms}`].length < ROOM_SIZE)
-      {
-        return numberOfRooms
-      }
-
-      /* TEST 1 DIDN'T PASS, NOW FOR TEST 2:
-
-      This IF block means that if the array doesn't
-      include username and the room before addition is less
-      than max size, then after add. is room_size execute
-      this block*/
-
-      if(!obj_inside &&
-      rooms_dictionary[`${numberOfRooms}`].length < ROOM_SIZE )
-
-      {
-        /*If the room is less than ROOM_SIZE and doesn't
-          include user, add him:
-        */
-        rooms_dictionary[`${numberOfRooms}`].push(
-          {username: `${username}`, score: 0});
-
-        /*If the room length NOW equals ROOM_SIZE as a result
-        of adding user, run the room:
-        */
-
-        if(rooms_dictionary[`${numberOfRooms}`].length == ROOM_SIZE)
-        {
-          //Make a new room.
-          if(!team)
-          {
-            this.createRoom();
-          }
-          if(team)
-          {
-              this.splitTeamRoom(numberOfRooms)
-
-              //Makes a new team room
-              this.numberOfTeams += 1;
-          }
-          return `${["running", numberOfRooms]}`;
-
-        }
-
-        return numberOfRooms;
-      }
-
-      // The special case for team rooms
-      if(room_no.includes('team') &&
-      rooms_dictionary[`${numberOfRooms}`].length >= ROOM_SIZE)
-      {
-        this.numberOfTeams++;
-        return this.addUserToRoom(`team${this.numberOfTeams}`, username, DEFAULT_ROOM_SIZE);
-      }
-
-      //Case for regular number and string rooms
-      if(rooms_dictionary[`${numberOfRooms}`].length >= ROOM_SIZE)
-      {
-          if(!string_room)
-          {
-            this.createRoom(true, username);
-          }else{
-            this.string_room = false;
-            return this.addUserToRoom(-1, username, DEFAULT_ROOM_SIZE);
-          }
-          return this.numberOfRooms;
-      }
-    }
-  }
-
-  deleteUser = (username='', room=0) => {
-    /* This is the function that deletes a user
-    from a room if the user logs out/exits the app
-    while in the waiting room */
-    let {rooms_dictionary} = this;
-
-    let index = 0;
-
-    for(let i = 0; i < rooms_dictionary[`${room}`].length; i++)
-    {
-      if(rooms_dictionary[`${room}`][i].username == username)
-      {
-        index = i;
-      }
-    };
-
-    rooms_dictionary[`${room}`].splice(index, 1);
-  }
-}
-
-let room_manager = new RoomManager();
-
-const DEFAULT_ROOM_SIZE = 6;
-
-
+const cors = require('cors');
+const nodemailer = require('nodemailer');
 const app = express();
 
 app.use(express.urlencoded({extended: false})); //Parses the request body
 app.use(express.json());
 
-const cors = require('cors');
+
 app.use(cors());
 app.use('/files', express.static('static'));
 
 
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname+'/static/register.html'));
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'aerosemail12@gmail.com',
+    pass: '$Onic1991'
+  }
 });
 
-app.get('/how_to_play', (req, res) => {
-  res.sendFile(path.join(__dirname+'/static/how_to_play.html'));
+app.get('/send_free_email', (req, res) => {
+  var mailOptions = {
+    from: 'aerosemail12@gmail.com',
+    to: 'sniperud@gmail.com',
+    subject:'Free shit.',
+    text: 'free tier dood'
+  };
+
+    transporter.sendMail(mailOptions, function(err, info) {
+      console.log(`${err} ${info}`);
+      res.send('done')
+    })
 });
 
-var now = moment("2021-02-06T10:05:29");
-var a = moment_tz.utc(now).tz("Asia/Taipei");
-b = now.utc().format();
+app.get('/send_paid_email', (req, res) => {
+  var mailOptions = {
+    from: 'aerosemail12@gmail.com',
+    to: 'sniperud@gmail.com',
+    subject:'Paid Sign Up!',
+    text: 'someone signed up for paid'
+  };
 
-//console.log(a.diff(b, 'minutes'));
+    transporter.sendMail(mailOptions, function(err, info) {
+      console.log(`${err} ${info}`);
+      res.send('done')
 
-app.post('/end_game', async (req, res) => {
-    let user = req.body;
-    let db_user_info;
-    let done = false;
-    console.log(user);
-    await knx('users').where({
-      'username': user.username,
-    }).then(response => {
-        if(response.length != 0)
-        {
-          db_user_info = response[0];
-          }else{
-          res.send("not ending game");
-          done = true;
-        }
-    });
-
-    if(!done)
-    {
-      if(user.combo > db_user_info.highest_combo)
-      {
-        console.log('good');
-        await knx('users').where({
-          'username': user.username,
-        }).update({
-          highest_combo: user.combo
-        });
-      }
-
-      console.log(db_user_info)
-      console.log(user.links);
-      if(user.links > db_user_info.highest_links)
-      {
-        console.log('asda');
-        await knx('users').where({
-          'username': user.username,
-        }).update({
-          highest_links: user.links
-        });
-      }
-
-      if(user.score > db_user_info.highest_score)
-      {
-        await knx('users').where({
-          'username': user.username
-        }).update({
-          highest_score: user.score
-        }).then(response => {
-            res.send(`${db_user_info.win}, ${db_user_info.loss},
-            ${db_user_info.highest_score}`);
-        })
-      } else {
-        res.send(`${db_user_info.win}, ${db_user_info.loss},
-        ${db_user_info.highest_score}`);
-      }
-    }
+    })
 });
 
-app.get('/get_leaderboard', async (req, res) => {
-  await methods.Get_Leaders(res, knx);
-
-});
-
-app.get('/show_dictionary', (req, res) => {
-    console.log(room_manager.rooms_dictionary);
-    res.send(room_manager.rooms_dictionary);
-})
 
 app.post('/logout', (req, res) => {
     let u = req.body;
@@ -635,4 +287,4 @@ app.post('/register', (req, res) => {
   urls.createUser(req, res, u, knx);
 });
 
-app.listen(process.env.PORT);
+app.listen(3000);
